@@ -2,22 +2,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-dir = "dataset\FinalDatasetEsEnSongs.csv"
+dir = "dataset\EsEnSongsDatasetWithFeatures.csv"
 
 df = pd.read_csv(dir)
-print(df.index)
-print(df.head())
+print(len(df))
 popularity_range = range(0, 101)  # 0 to 3.5 minutes
 # initialize counters
 total_counts = [0] * len(popularity_range)
 exceed_counts = [0] * len(popularity_range)
 
+
 for song_index in df.index:
 
     song = df.iloc[song_index]
     popularity = song["popularity"]
-    #if song["genre"] == "Pop": # delete comentary to take into account only certain music gender
-    #    continue
+    if song["genre"] == "Pop": # delete comentary to take into account only certain music gender
+        continue
 
     for i in range(len(popularity_range)):
         total_counts[i] += 1
@@ -30,13 +30,13 @@ for i in range(len(popularity_range)):
     percentages[i] = exceed_counts[i] / total_counts[i] * 100
 
 # find the first index where the percentage goes under 95%
-index_under_10 = next((i for i, x in enumerate(percentages) if x < 10), None)
+index_under_10 = next((i for i, x in enumerate(percentages) if x < 20), None)
 
 # create a line chart
 fig, ax = plt.subplots()
 ax.plot(popularity_range, percentages, color='blue')
-ax.plot([0, 100], [10, 10], color='red', linestyle='dashed')
-ax.fill_between(popularity_range, percentages, 10, where=(np.array(percentages) >= 10), interpolate=True, color='green', alpha=0.3)
+ax.plot([0, 100], [20, 20], color='red', linestyle='dashed')
+ax.fill_between(popularity_range, percentages, 20, where=(np.array(percentages) >= 20), interpolate=True, color='green', alpha=0.3)
 ax.set_title("Percent of Rock songs exceeding popularity")
 ax.set_xlabel("Popularity")
 ax.set_ylabel("Percentage of songs")
